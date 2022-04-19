@@ -43,7 +43,7 @@ class Car:
             self.road = self.road.ends[self.turns[self.turnNum]]
             self.currentSpot.clear()
             self.currentSpot = self.road.spots[0]
-            self.currentSpot.claim(self)
+            self.road.spots[0].claim(self)
             self.turnNum += 1
         elif not self.road.isSpotEnd(self.currentSpot) and not self.road.getNextSpot(self.currentSpot).occupied():
             print(f'car {self.number} moved forwards')

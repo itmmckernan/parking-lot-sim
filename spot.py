@@ -10,6 +10,8 @@ class Spot:
         self.occupant = None
 
     def claim(self, occupant):
+        if self.occupied():
+            BlockingIOError('Spot Forcefully taken')
         self.occupant = occupant
 
     def occupied(self):
