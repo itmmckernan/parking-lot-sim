@@ -4,7 +4,7 @@ import random
 import math
 import pygame
 
-num_cars = 300
+num_cars = 250
 
 rows = 5
 spots_per_row = 33
@@ -46,9 +46,14 @@ for i in range(num_cars):
                 turns.append(random.randint(0, 32))
         else:
             turns.append(randomNum)
-            turns.append(random.randint(0, 1))
+            nextNum = random.randint(0, 1)
+            turns.append(nextNum)
             turns.append(0)
-            turns.append(random.randint(0, 1))
+            if nextNum:
+                turns.append(random.randint(0, 1))
+            else:
+                turns.append(1)
+
             turns.append(random.randint(0, 32))
 
         unique = turns not in spotsTaken
@@ -58,7 +63,7 @@ for i in range(num_cars):
 
 pygame.init()
 screen = pygame.display.set_mode((2059, 906))
-pygame.key.set_repeat(100, 150)
+pygame.key.set_repeat(100, 100)
 
 background_image = pygame.image.load("background.png").convert()
 
@@ -67,6 +72,7 @@ running = True
 circles = []
 
 tick_num = 0
+num_cars_remaining = num_cars
 while running:
     screen.blit(background_image, [0, 0])
 
@@ -76,15 +82,17 @@ while running:
         if event.type == pygame.KEYDOWN:
             circles = []
             tick_num += 1
+            num_cars_remaining = 0
             for car in cars:
                 car.tick()
+                num_cars_remaining += 1 if car.done and car.taskTicks == 0 else 0
                 if car.currentSpot is not None:
                     print(car.getPoint())
                     circles.append(car.getPoint())
 
-    for circle in circles:
-        pygame.draw.circle(screen, (0, 0, 255), circle, 7)
+    for circle, car in zip(circles, cars):
+        pygame.draw.circle(screen, (255 if car.done and car.taskTicks == 0 else 0, 0, 0), circle, 7)
 
-
+    pygame.display.set_caption(f'cars remaining: {num_cars - num_cars_remaining} out of {num_cars}. Tick {tick_num}')
 
     pygame.display.flip()

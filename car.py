@@ -11,8 +11,10 @@ class Car:
 
     def getPoint(self):
         point = self.road.getPointPos(self.currentSpot)
-        offset = 0 if not self.done else (50 if self.turns[-1] else -50)
-        return point[0], point[1] + offset
+        done = self.done and self.taskTicks == 0
+        offset_y = 0 if not done else (50 if self.turns[-1] else -50)
+        offset_x = 0 if not done else 25
+        return point[0] + offset_x, point[1] + offset_y
 
 
     def tick(self):
