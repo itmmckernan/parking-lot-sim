@@ -71,9 +71,13 @@ running = True
 
 circles = []
 
+font = pygame.font.Font('freesansbold.ttf', 12)
+texts = []
+
 tick_num = 0
 num_cars_remaining = num_cars
 while running:
+
     screen.blit(background_image, [0, 0])
 
     for event in pygame.event.get():
@@ -88,10 +92,14 @@ while running:
                 num_cars_remaining += 1 if car.done and car.taskTicks == 0 else 0
                 if car.currentSpot is not None:
                     print(car.getPoint())
-                    circles.append(car.getPoint())
+                    circles.append([car.getPoint(), car])
 
-    for circle, car in zip(circles, cars):
+    for circle, car in circles, cars:
         pygame.draw.circle(screen, (255 if car.done and car.taskTicks == 0 else 0, 0, 0), circle, 7)
+        text = font.render(f'Car {car.number} State: {"Parking" if car.done and car.taskTicks == 0 else "Parked"}', True, (255, 0, 0), (255, 255, 255))
+        text_rect = text.get_rect()
+        text_rect.center = (circle[0], circle[1] + (-15 if hash(car) >> 5 & 0x1 else 15))
+        screen.blit(text, text_rect)
 
     pygame.display.set_caption(f'cars remaining: {num_cars - num_cars_remaining} out of {num_cars}. Tick {tick_num}')
 
