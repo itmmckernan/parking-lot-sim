@@ -94,9 +94,9 @@ while running:
                     print(car.getPoint())
                     circles.append([car.getPoint(), car])
 
-    for circle, car in circles, cars:
+    for circle, car in circles:
         pygame.draw.circle(screen, (255 if car.done and car.taskTicks == 0 else 0, 0, 0), circle, 7)
-        text = font.render(f'Car {car.number} State: {"Parking" if car.done and car.taskTicks == 0 else "Parked"}', True, (255, 0, 0), (255, 255, 255))
+        text = font.render(f'Car {car.number} State: {"Parked" if car.done and car.taskTicks == 0 else "Parking"}', True, (255, 0, 0), (255, 255, 255))
         text_rect = text.get_rect()
         text_rect.center = (circle[0], circle[1] + (-15 if hash(car) >> 5 & 0x1 else 15))
         screen.blit(text, text_rect)

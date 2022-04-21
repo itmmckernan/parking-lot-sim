@@ -3,13 +3,14 @@ class Car:
     taskTicks = 0
     turnNum = 0
     def __init__(self, road, finalSpot, turns, number, currentSpot=None):
+        self.lastSpot = None
         self.road = road
         self.finalSpot = finalSpot
         self.turns = turns
         self.currentSpot = currentSpot
         self.number = number
 
-    def getPoint(self):
+    def getPoint(self, interp=0):
         point = self.road.getPointPos(self.currentSpot)
         done = self.done and self.taskTicks == 0
         offset_y = 0 if not done else (50 if self.turns[-1] else -50)
@@ -18,6 +19,7 @@ class Car:
 
 
     def tick(self):
+        self.lastSpot = self.currentSpot
         if self.taskTicks:
             self.taskTicks -= 1
             return
